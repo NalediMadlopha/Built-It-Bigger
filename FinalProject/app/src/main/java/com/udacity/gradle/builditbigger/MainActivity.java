@@ -5,17 +5,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ProgressView {
+
+    private ProgressBar progressBar;
+    private View fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
+        progressBar = findViewById(R.id.progress_bar);
+        fragment = findViewById(R.id.fragment);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,9 +45,19 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
+    @Override
+    public void showProgressView() {
+        fragment.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void hideProgressView() {
+        progressBar.setVisibility(View.GONE);
+        fragment.setVisibility(View.VISIBLE);
+    }
 
+    public void tellJoke(View view) {
+        new FetchJokesAsyncTask(this).execute();
+    }
 }
